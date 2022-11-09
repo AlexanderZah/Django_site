@@ -2,7 +2,7 @@
     <h5 class="card-header">Прокомментируй:</h5>
     {% if user.is_authenticated %}
     <div class="card-body">
-        <form method='"post'>
+        <form method='post'>
             {% csrf_token %}
             <div class="form-group">
                 {{ comment_form.text }}

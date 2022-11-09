@@ -42,14 +42,14 @@ class PostDetailView(View):
                     })
 
     def post(self, request, slug, *args, **kwargs):
-        comment_form = CommentForm()
+        comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             text = request.POST['text']
             username = self.request.user
             post = get_object_or_404(Post, url=slug)
-            comment = comment.objects.create(post=post, username=username, text=text)
+            comment = Comment.objects.create(post=post, username=username, text=text)
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-        return render(request, 'myblog/post_detal.html', context={
+        return render(request, 'myblog/post_detail.html', context={
             'comment_form':comment_form
         })
 
@@ -86,7 +86,7 @@ class SignInView(View):
                 password = cd['password']
                 user = authenticate(request, username=username,
                                     password=password)
-                if user is None:
+                if user is not None:
                     login(request, user)
                     return HttpResponseRedirect('/')
         return render(request, 'myblog/signin.html',
